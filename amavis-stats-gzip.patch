@@ -1,6 +1,5 @@
-diff -ur amavis-stats-0.1.10.orig/amavis-stats amavis-stats-0.1.10/amavis-stats
---- amavis-stats-0.1.10.orig/amavis-stats	2004-02-08 19:43:59.000000000 +0100
-+++ amavis-stats-0.1.10/amavis-stats	2004-03-15 15:41:44.000000000 +0100
+--- amavis-stats-0.1.13-rc6/amavis-stats.orig	2004-05-17 08:07:51.000000000 +0000
++++ amavis-stats-0.1.13-rc6/amavis-stats	2004-08-06 07:27:08.849931336 +0000
 @@ -35,6 +35,7 @@
  use Fcntl ':flock';
  use POSIX qw(strftime);
@@ -9,7 +8,7 @@ diff -ur amavis-stats-0.1.10.orig/amavis-stats amavis-stats-0.1.10/amavis-stats
  
  
  # ########################################################################
-@@ -556,6 +557,59 @@
+@@ -698,6 +699,59 @@
  
  
  #
@@ -69,7 +68,7 @@ diff -ur amavis-stats-0.1.10.orig/amavis-stats amavis-stats-0.1.10/amavis-stats
  # Find the previous (rotated) log file and parse that according to
  # our last position
  #
-@@ -578,18 +632,63 @@
+@@ -720,18 +774,63 @@
  
      if (-f "$logfile.0") {
          $rotlogfile = $logfile . ".0";
@@ -92,49 +91,49 @@ diff -ur amavis-stats-0.1.10.orig/amavis-stats amavis-stats-0.1.10/amavis-stats
 +    } elsif (-f "$logfile-$yesterday.gz") {
 +        $rotlogfile = $logfile . "-$yesterday.gz";
 +    } else {
-+	    $rotlogfile = $logfile;
-+#	    $rotlogfile =~ s/(.*)\/([a-z]*)/$1\/archiv\/$2/g;
-+	    $rotlogfile =~ s/\/var\/log\/(.*)/\/var\/log\/archiv\/$1/g;
-+	    if ($rotlogfile eq $logfile) {
-+		    $rotlogfile = "archiv/$logfile";
-+	    }
-+	    if (-f "$rotlogfile.0") {
-+		    $rotlogfile = $rotlogfile . ".0";
-+	    } elsif (-f "$rotlogfile.0.gz") {
-+		    $rotlogfile = $rotlogfile . ".0.gz";
-+	    } elsif (-f "$rotlogfile.1") {
-+		    $rotlogfile = $rotlogfile . ".1";
-+	    } elsif (-f "$rotlogfile.1.gz") {
-+		    $rotlogfile = $rotlogfile . ".1.gz";
-+	    } elsif (-f "$rotlogfile.01") {
-+		    $rotlogfile = $rotlogfile . ".01";
-+	    } elsif (-f "$rotlogfile.01.gz") {
-+		    $rotlogfile = $rotlogfile . ".01.gz";
-+	    } elsif (-f "$rotlogfile-$today") {
-+		    $rotlogfile = $rotlogfile . "-$today";
-+	    } elsif (-f "$rotlogfile-$today.gz") {
-+		    $rotlogfile = $rotlogfile . "-$today.gz";
-+	    } elsif (-f "$rotlogfile-$yesterday") {
-+		    $rotlogfile = $rotlogfile . "-$yesterday";
-+	    } elsif (-f "$rotlogfile-$yesterday.gz") {
-+		    $rotlogfile = $rotlogfile . "-$yesterday.gz";
-+	    }
-+	    if (! -f $rotlogfile) {
-+		    $rotlogfile = undef;
-+	    }
++           $rotlogfile = $logfile;
++#          $rotlogfile =~ s/(.*)\/([a-z]*)/$1\/archiv\/$2/g;
++           $rotlogfile =~ s/\/var\/log\/(.*)/\/var\/log\/archiv\/$1/g;
++           if ($rotlogfile eq $logfile) {
++                   $rotlogfile = "archiv/$logfile";
++           }
++           if (-f "$rotlogfile.0") {
++                   $rotlogfile = $rotlogfile . ".0";
++           } elsif (-f "$rotlogfile.0.gz") {
++                   $rotlogfile = $rotlogfile . ".0.gz";
++           } elsif (-f "$rotlogfile.1") {
++                   $rotlogfile = $rotlogfile . ".1";
++           } elsif (-f "$rotlogfile.1.gz") {
++                   $rotlogfile = $rotlogfile . ".1.gz";
++           } elsif (-f "$rotlogfile.01") {
++                   $rotlogfile = $rotlogfile . ".01";
++           } elsif (-f "$rotlogfile.01.gz") {
++                   $rotlogfile = $rotlogfile . ".01.gz";
++           } elsif (-f "$rotlogfile-$today") {
++                   $rotlogfile = $rotlogfile . "-$today";
++           } elsif (-f "$rotlogfile-$today.gz") {
++                   $rotlogfile = $rotlogfile . "-$today.gz";
++           } elsif (-f "$rotlogfile-$yesterday") {
++                   $rotlogfile = $rotlogfile . "-$yesterday";
++           } elsif (-f "$rotlogfile-$yesterday.gz") {
++                   $rotlogfile = $rotlogfile . "-$yesterday.gz";
++           }
++           if (! -f $rotlogfile) {
++                   $rotlogfile = undef;
++           }
      }
  
-     if (defined($rotlogfile)) {
+     if (defined $rotlogfile) {
 -        parseFile ($rotlogfile, $spos, (stat $rotlogfile)[7]);
-+	if ( $rotlogfile =~ /\.gz$/ ) {
-+		parseFilegz ($rotlogfile, $spos);
-+	} else {
-+		parseFile ($rotlogfile, $spos, (stat $rotlogfile)[7]);
-+	}
++       if ( $rotlogfile =~ /\.gz$/ ) {
++               parseFilegz ($rotlogfile, $spos);
++       } else {
++               parseFile ($rotlogfile, $spos, (stat $rotlogfile)[7]);
++       }
      } else {
          err("Could not open rotated logfile.");
          err("  Tried extentions .0, .1, .01, -$today, -$yesterday");
-@@ -703,7 +802,11 @@
+@@ -854,7 +953,11 @@
      $spos = 0; # reset to the start of the file
  }
  

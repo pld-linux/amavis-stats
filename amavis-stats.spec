@@ -1,13 +1,14 @@
 %include	/usr/lib/rpm/macros.perl
+%define		_rc	rc6
 Summary:	Simple amavisd-new statistics generator
 Summary(pl):	Prosty generator statystyk dla amavisd-new
 Name:		amavis-stats
-Version:	0.1.12
-Release:	3
+Version:	0.1.13
+Release:	0.%{_rc}.1
 License:	GPL
 Group:		Applications/System
-Source0:	http://rekudos.net/download/%{name}-%{version}.tar.gz
-# Source0-md5:	b85063b3bb8ecdb03d1b7aebf0c0a6cd
+Source0:	http://rekudos.net/download/%{name}-%{version}-%{_rc}.tar.gz
+# Source0-md5:	39156ca0eba50405d836aaf9d97743bf
 Source1:	%{name}.cron
 Patch0:		%{name}-gzip.patch
 Patch1:		%{name}-more_ac.patch
@@ -43,7 +44,7 @@ PHP interface for amavis-stats.
 Interfejs PHP dla amavis-stats.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}-%{_rc}
 %patch0 -p1
 %patch1 -p0
 
@@ -65,6 +66,10 @@ group=`id -g`
 	web_group=$group
 	
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/cron.d/amavis-stats
+
+cd $RPM_BUILD_ROOT%{_datadir}/%{name}/
+ln -s amavis-stats.php index.php
+
 
 %clean
 rm -rf $RPM_BUILD_ROOT
