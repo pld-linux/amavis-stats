@@ -46,6 +46,7 @@ Interfejs PHP dla amavis-stats.
 %patch0 -p1
 %patch1 -p0
 
+%build
 %configure
 %{__make}
 
