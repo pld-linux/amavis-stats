@@ -2,15 +2,15 @@
 Summary:	Simple amavisd-new statistics generator
 Summary(pl):	Prosty generator statystyk dla amavisd-new
 Name:		amavis-stats
-Version:	0.1.10
-Release:	5
+Version:	0.1.11
+Release:	1
 License:	GPL
 Group:		Applications/System
-# http://rekudos.net/download/amavis-stats.tar.gz
-Source0:	ftp://distfiles.pld-linux.org/src/%{name}-%{version}.tar.gz
-# Source0-md5:	12288bbf8cf9da0fec64c9660712892a
+Source0:	http://rekudos.net/download/%{name}-%{version}.tar.gz
+# Source0-md5:	dca258634ccad341e556ff0ef214b101
 Source1:	%{name}.cron
 Patch0:		%{name}-gzip.patch
+Patch1:		%{name}-more_ac.patch
 URL:		http://rekudos.net/amavis-stats/
 BuildArch:	noarch
 Provides:	%{name}-%{version}-%{release}
@@ -44,13 +44,23 @@ Interfejs PHP dla amavis-stats.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p0
+
+%configure
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/cron.d
+user=`id -u`
+group=`id -g`
 
-%{__make} install installman \
-	DESTDIR=$RPM_BUILD_ROOT \
+%{__make} install \
+	install_prefix=$RPM_BUILD_ROOT \
+	amavis_user=$user \
+	amavis_group=$group \
+	web_user=$user \
+	web_group=$group
 	
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/cron.d/amavis-stats
 
