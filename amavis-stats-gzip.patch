@@ -1,0 +1,147 @@
+diff -ur amavis-stats-0.1.10.orig/amavis-stats amavis-stats-0.1.10/amavis-stats
+--- amavis-stats-0.1.10.orig/amavis-stats	2004-02-08 19:43:59.000000000 +0100
++++ amavis-stats-0.1.10/amavis-stats	2004-03-09 19:57:31.000000000 +0100
+@@ -35,6 +35,7 @@
+ use Fcntl ':flock';
+ use POSIX qw(strftime);
+ use POSIX qw(locale_h);
++use Compress::Zlib;
+ 
+ 
+ # ########################################################################
+@@ -556,6 +557,59 @@
+ 
+ 
+ #
++#
++#
++sub parseFilegz {
++
++    my ($fname, $start) = @_;
++    dbg("parseFilegz ($fname, $start)");
++
++    #
++    # Open up the file we need to parse
++    #
++    my $gz = gzopen ($fname, "rb");
++    if (!defined($gz))
++    {
++	err("Couldn't open logfile $fname"); 
++        exit 2; 
++    }
++
++    #
++    # Loop each line until the current end of file
++    #
++    $pos = 0;
++    while ($pos < $start) {
++    	$pos += $gz->gzreadline($line);
++    }
++    my $lineid = 0;
++    my $p = 0;
++    do {
++	$p = $gz->gzreadline($line);
++	$pos += $p;
++
++	if ($p > 0) {
++		$lineid++;
++		$lastepoch = $epoch;
++
++		if ($line =~ /amavis.*?\[\d+\]:/) {
++		    classify();
++		}
++		#
++		# Save the current statistics every 1000 lines. This way
++		# if the program dies we don't have to start again from the 
++		# beginning each time. Also good for monitoring the graphs
++		# to see where we are up to.
++		#
++		if (!($lineid % 1000)) {
++		    saveState();;
++		}
++	}
++    } while $p > 0;
++    $gz->gzclose();
++}
++
++
++#
+ # Find the previous (rotated) log file and parse that according to
+ # our last position
+ #
+@@ -578,18 +632,62 @@
+ 
+     if (-f "$logfile.0") {
+         $rotlogfile = $logfile . ".0";
++    } elsif (-f "$logfile.0.gz") {
++        $rotlogfile = $logfile . ".0.gz";
+     } elsif (-f "$logfile.1") {
+         $rotlogfile = $logfile . ".1";
++    } elsif (-f "$logfile.1.gz") {
++        $rotlogfile = $logfile . ".1.gz";
+     } elsif (-f "$logfile.01") {
+         $rotlogfile = $logfile . ".01";
++    } elsif (-f "$logfile.01.gz") {
++        $rotlogfile = $logfile . ".01.gz";
+     } elsif (-f "$logfile-$today") {
+         $rotlogfile = $logfile . "-$today";
++    } elsif (-f "$logfile-$today.gz") {
++        $rotlogfile = $logfile . "-$today.gz";
+     } elsif (-f "$logfile-$yesterday") {
+         $rotlogfile = $logfile . "-$yesterday";
++    } elsif (-f "$logfile-$yesterday.gz") {
++        $rotlogfile = $logfile . "-$yesterday.gz";
++    } else {
++	    $rotlogfile = $logfile;
++	    $rotlogfile =~ s/\(.*\)\/\([a-z]*\)/$1\/archiv\/$2/;
++	    if ($rotlogfile eq $logfile) {
++		    $rotlogfile = "archiv/$logfile";
++	    }
++	    if (-f "$rotlogfile.0") {
++		    $rotlogfile = $rotlogfile . ".0";
++	    } elsif (-f "$rotlogfile.0.gz") {
++		    $rotlogfile = $rotlogfile . ".0.gz";
++	    } elsif (-f "$rotlogfile.1") {
++		    $rotlogfile = $rotlogfile . ".1";
++	    } elsif (-f "$rotlogfile.1.gz") {
++		    $rotlogfile = $rotlogfile . ".1.gz";
++	    } elsif (-f "$rotlogfile.01") {
++		    $rotlogfile = $rotlogfile . ".01";
++	    } elsif (-f "$rotlogfile.01.gz") {
++		    $rotlogfile = $rotlogfile . ".01.gz";
++	    } elsif (-f "$rotlogfile-$today") {
++		    $rotlogfile = $rotlogfile . "-$today";
++	    } elsif (-f "$rotlogfile-$today.gz") {
++		    $rotlogfile = $rotlogfile . "-$today.gz";
++	    } elsif (-f "$rotlogfile-$yesterday") {
++		    $rotlogfile = $rotlogfile . "-$yesterday";
++	    } elsif (-f "$rotlogfile-$yesterday.gz") {
++		    $rotlogfile = $rotlogfile . "-$yesterday.gz";
++	    }
++	    if (! -f $rotlogfile) {
++		    $rotlogfile = undef;
++	    }
+     }
+ 
+     if (defined($rotlogfile)) {
+-        parseFile ($rotlogfile, $spos, (stat $rotlogfile)[7]);
++	if ( $rotlogfile =~ /\.gz$/ ) {
++		parseFilegz ($rotlogfile, $spos);
++	} else {
++		parseFile ($rotlogfile, $spos, (stat $rotlogfile)[7]);
++	}
+     } else {
+         err("Could not open rotated logfile.");
+         err("  Tried extentions .0, .1, .01, -$today, -$yesterday");
+@@ -703,7 +801,11 @@
+     $spos = 0; # reset to the start of the file
+ }
+ 
++if ( $logfile =~ /\.gz$/ ) {
++parseFilegz ($logfile, $spos);
++} else {
+ parseFile ($logfile, $spos, $eof);
++}
+ saveState();
+ semunlock();
+ 
