@@ -3,7 +3,7 @@ Summary:	Simple amavisd-new statistics generator
 Summary(pl):	Prosty generator statystyk dla amavisd-new
 Name:		amavis-stats
 Version:	0.1.10
-Release:	1
+Release:	2
 License:	GPL
 Group:		Applications/System
 # http://rekudos.net/download/amavis-stats.tar.gz
@@ -31,7 +31,7 @@ wirusy, na podstawie logów amavisd-new.
 Summary:	PHP interface for amavis-stats
 Summary(pl):	Interfejs PHP dla amavis-stats
 Group:		Applications/System
-Requires:	%{name}
+Requires:	%{name}-%{version}-%{release}
 
 %description php
 PHP interface for amavis-stats.
