@@ -1,0 +1,19 @@
+--- Makefile.in~	2004-03-17 23:46:55.000000000 +0100
++++ Makefile.in	2004-03-21 18:18:27.000000000 +0100
+@@ -38,12 +38,12 @@
+ var_prefix     = @var_prefix@
+ localstatedir  = @localstatedir@
+ install_prefix = @install_prefix@
+-sbindir        = $(exec_prefix)/sbin
++sbindir        = @sbindir@
+ sysconfdir     = /etc/$(PKG)
+ datadir        = @datadir@/$(PKG)
+ localstatedir  = $(var_prefix)/var/lib/$(PKG)
+-infodir        = $(prefix)/info
+-mandir         = $(prefix)/man/man1
+-imgdir         = $(var_prefix)/var/cache/$(PKG)
++infodir        = @infodir@
++mandir         = @mandir@/man1
++imgdir         = $(var_prefix)/var/lib/$(PKG)/img
+ debdir         = /var/www/debian
+ downloaddir    = /var/www/download
