@@ -10,7 +10,7 @@ Group:		Applications/System
 Source0:	ftp://distfiles.pld-linux.org/src/%{name}-%{version}.tar.gz
 # Source0-md5:	12288bbf8cf9da0fec64c9660712892a
 Source1:	%{name}.cron
-URL:		http://rekudos.net/amavis-stats
+URL:		http://rekudos.net/amavis-stats/
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -28,9 +28,7 @@ Tworzy wykresy zainfekowanych wiadomo¶ci, w rozbiciu na poszczególne
 wirusy, na podstawie logów amavisd-new.
 
 %prep
-%setup -q -n %{name}-%{version}
-
-%build
+%setup -q
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -49,7 +47,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc README
-
 %attr(755,root,root) %{_bindir}/amavis-stats
 %dir %{_htmldir}/%{name}
 %dir %attr(755,http,root) %{_htmldir}/%{name}/img
