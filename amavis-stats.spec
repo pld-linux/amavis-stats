@@ -34,6 +34,7 @@ Summary:	PHP interface for amavis-stats
 Summary(pl):	Interfejs PHP dla amavis-stats
 Group:		Applications/System
 Requires:	%{name}-%{version}-%{release}
+Requires:	php-pcre
 
 %description php
 PHP interface for amavis-stats.
