@@ -3,13 +3,14 @@ Summary:	Simple amavisd-new statistics generator
 Summary(pl):	Prosty generator statystyk dla amavisd-new
 Name:		amavis-stats
 Version:	0.1.10
-Release:	2
+Release:	3
 License:	GPL
 Group:		Applications/System
 # http://rekudos.net/download/amavis-stats.tar.gz
 Source0:	ftp://distfiles.pld-linux.org/src/%{name}-%{version}.tar.gz
 # Source0-md5:	12288bbf8cf9da0fec64c9660712892a
 Source1:	%{name}.cron
+Patch0:		%{name}-gzip.patch
 URL:		http://rekudos.net/amavis-stats/
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -41,6 +42,7 @@ Interfejs PHP dla amavis-stats.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %install
 rm -rf $RPM_BUILD_ROOT
