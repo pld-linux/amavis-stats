@@ -113,7 +113,7 @@ fi
 %files php
 %defattr(644,root,root,755)
 %dir %{_sysconfdir}/%{name}
-%attr(640,root,root) %config(noreplace) %{_sysconfdir}/%{name}/apache.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/apache.conf
 %dir %{_phpdir}
 %dir %attr(755,http,root) %{_phpdir}/img
 %{_phpdir}/%{name}.php
