@@ -1,4 +1,4 @@
 #
 # cron job for the amavis-stats package
 #
-#*/5 * * * *	root	/usr/bin/amavis-stats /var/log/mail/info
+*/5 * * * *	root	/usr/bin/amavis-stats /var/log/maillog
