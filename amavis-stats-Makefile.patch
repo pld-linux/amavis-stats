@@ -1,0 +1,11 @@
+--- amavis-stats-0.1.13-rc6/Makefile.in	2004-05-07 09:31:55.000000000 +0000
++++ amavis-stats-0.1.13-rc6.new/Makefile.in	2004-11-01 13:37:09.662852080 +0000
+@@ -169,7 +169,7 @@
+ 	sed -e 's/^\(\$$asVersion \+= \+\"\).*\"/\1$(VERS)\"/' \
+ 		amavis-stats.php > VERS.php
+ 	mv VERS.php amavis-stats.php
+-	sed -e "1s+.*+\#! $(perl)+" \
++	sed -e "1s+.*+\#!$(perl)+" \
+ 		amavis-stats > VERS.pl
+ 	mv VERS.pl amavis-stats
+ 	sed -e 's/^\(\$$version \+= \+\"\).*\"/\1$(VERS)\"/' \
