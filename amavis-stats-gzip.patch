@@ -1,6 +1,6 @@
 diff -ur amavis-stats-0.1.10.orig/amavis-stats amavis-stats-0.1.10/amavis-stats
 --- amavis-stats-0.1.10.orig/amavis-stats	2004-02-08 19:43:59.000000000 +0100
-+++ amavis-stats-0.1.10/amavis-stats	2004-03-09 19:57:31.000000000 +0100
++++ amavis-stats-0.1.10/amavis-stats	2004-03-15 15:41:44.000000000 +0100
 @@ -35,6 +35,7 @@
  use Fcntl ':flock';
  use POSIX qw(strftime);
@@ -69,7 +69,7 @@ diff -ur amavis-stats-0.1.10.orig/amavis-stats amavis-stats-0.1.10/amavis-stats
  # Find the previous (rotated) log file and parse that according to
  # our last position
  #
-@@ -578,18 +632,62 @@
+@@ -578,18 +632,63 @@
  
      if (-f "$logfile.0") {
          $rotlogfile = $logfile . ".0";
@@ -93,7 +93,8 @@ diff -ur amavis-stats-0.1.10.orig/amavis-stats amavis-stats-0.1.10/amavis-stats
 +        $rotlogfile = $logfile . "-$yesterday.gz";
 +    } else {
 +	    $rotlogfile = $logfile;
-+	    $rotlogfile =~ s/\(.*\)\/\([a-z]*\)/$1\/archiv\/$2/;
++#	    $rotlogfile =~ s/(.*)\/([a-z]*)/$1\/archiv\/$2/g;
++	    $rotlogfile =~ s/\/var\/log\/(.*)/\/var\/log\/archiv\/$1/g;
 +	    if ($rotlogfile eq $logfile) {
 +		    $rotlogfile = "archiv/$logfile";
 +	    }
@@ -133,7 +134,7 @@ diff -ur amavis-stats-0.1.10.orig/amavis-stats amavis-stats-0.1.10/amavis-stats
      } else {
          err("Could not open rotated logfile.");
          err("  Tried extentions .0, .1, .01, -$today, -$yesterday");
-@@ -703,7 +801,11 @@
+@@ -703,7 +802,11 @@
      $spos = 0; # reset to the start of the file
  }
  
