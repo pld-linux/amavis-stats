@@ -3,7 +3,7 @@ Summary:	Simple amavisd-new statistics generator
 Summary(pl):	Prosty generator statystyk dla amavisd-new
 Name:		amavis-stats
 Version:	0.1.10
-Release:	3
+Release:	4
 License:	GPL
 Group:		Applications/System
 # http://rekudos.net/download/amavis-stats.tar.gz
@@ -13,10 +13,11 @@ Source1:	%{name}.cron
 Patch0:		%{name}-gzip.patch
 URL:		http://rekudos.net/amavis-stats/
 BuildArch:	noarch
+Provides:	%{name}-%{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_pkglibdir		/var/lib/%{name}
-%define		_htmldir		/home/services/httpd/html
+%define		_phpdir			/usr/share/%{name}
 
 %description
 amavis-stats is a simple amavis statistics generator based on rrdtool.
@@ -46,28 +47,49 @@ Interfejs PHP dla amavis-stats.
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT/etc/cron.d
 
-install -d $RPM_BUILD_ROOT{/etc/{cron.d,httpd},%{_bindir},%{_mandir}/man1} \
-	$RPM_BUILD_ROOT{%{_pkglibdir},%{_htmldir}/%{name}/img}
-
-install amavis-stats $RPM_BUILD_ROOT%{_bindir}
-install amavis-stats.php $RPM_BUILD_ROOT%{_htmldir}/%{name}/index.php
+%{__make} install installman \
+	DESTDIR=$RPM_BUILD_ROOT \
+	
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/cron.d/amavis-stats
-install amavis-stats.1 $RPM_BUILD_ROOT%{_mandir}/man1
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post php
+if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*/etc/%{name}/apache.conf" /etc/httpd/httpd.conf; then
+	echo "Include /etc/%{name}/apache.conf" >> /etc/httpd/httpd.conf
+fi
+if [ -f /var/lock/subsys/httpd ]; then
+	/usr/sbin/apachectl restart 1>&2
+fi
+
+%preun php
+if [ "$1" = "0" ]; then
+	umask 027
+	grep -v "^Include.*/etc/%{name}/apache.conf" /etc/httpd/httpd.conf > \
+		etc/httpd/httpd.conf.tmp
+	mv -f /etc/httpd/httpd.conf.tmp /etc/httpd/httpd.conf
+	if [ -f /var/lock/subsys/httpd ]; then
+		/usr/sbin/apachectl restart 1>&2
+	fi
+fi
+
 %files
 %defattr(644,root,root,755)
 %doc README
-%attr(755,root,root) %{_bindir}/amavis-stats
+%attr(755,root,root) %{_sbindir}/amavis-stats
 %dir %{_pkglibdir}
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/cron.d/amavis-stats
 %{_mandir}/man1/*
 
 %files php
 %defattr(644,root,root,755)
-%dir %{_htmldir}/%{name}
-%dir %attr(755,http,root) %{_htmldir}/%{name}/img
-%{_htmldir}/%{name}/index.php
+%dir /etc/%{name}
+%attr(640,root,root) %config(noreplace) /etc/%{name}/apache.conf
+%dir %{_phpdir}
+%dir %attr(755,http,root) %{_phpdir}/img
+%{_phpdir}/%{name}.php
+%{_phpdir}/index.php
+%attr(755,http,http) %dir %{_pkglibdir}/img
