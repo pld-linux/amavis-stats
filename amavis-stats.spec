@@ -27,6 +27,18 @@ amavis-stats jest prostym generatorem statystyk opartym na rrdtool.
 Tworzy wykresy zainfekowanych wiadomo¶ci, w rozbiciu na poszczególne
 wirusy, na podstawie logów amavisd-new.
 
+%package php
+Summary:	PHP interface for amavis-stats
+Summary(pl):	Interfejs PHP dla amavis-stats
+Group:		Applications/System
+Requires:	%{name}
+
+%description php
+PHP interface for amavis-stats.
+
+%description php -l pl
+Interfejs PHP dla amavis-stats.
+
 %prep
 %setup -q
 
@@ -48,9 +60,12 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc README
 %attr(755,root,root) %{_bindir}/amavis-stats
-%dir %{_htmldir}/%{name}
-%dir %attr(755,http,root) %{_htmldir}/%{name}/img
-%{_htmldir}/%{name}/index.php
 %dir %{_pkglibdir}
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/cron.d/amavis-stats
 %{_mandir}/man1/*
+
+%files php
+%defattr(644,root,root,755)
+%dir %{_htmldir}/%{name}
+%dir %attr(755,http,root) %{_htmldir}/%{name}/img
+%{_htmldir}/%{name}/index.php
