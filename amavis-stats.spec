@@ -4,7 +4,7 @@ Summary:	Simple amavisd-new statistics generator
 Summary(pl):	Prosty generator statystyk dla amavisd-new
 Name:		amavis-stats
 Version:	0.1.13
-Release:	0.%{_rc}.2
+Release:	0.%{_rc}.3
 License:	GPL
 Group:		Applications/System
 Source0:	http://rekudos.net/download/%{name}-%{version}-%{_rc}.tar.gz
@@ -77,6 +77,8 @@ rm -rf $RPM_BUILD_ROOT
 %post php
 if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*/etc/%{name}/apache.conf" /etc/httpd/httpd.conf; then
 	echo "Include /etc/%{name}/apache.conf" >> /etc/httpd/httpd.conf
+elif [ -d /etc/httpd/httpd.conf ]; then
+	ln -sf /etc/%{name}/apache.conf /etc/httpd/httpd.conf/99_%{name}.conf
 fi
 if [ -f /var/lock/subsys/httpd ]; then
 	/usr/sbin/apachectl restart 1>&2
@@ -85,9 +87,14 @@ fi
 %preun php
 if [ "$1" = "0" ]; then
 	umask 027
-	grep -v "^Include.*/etc/%{name}/apache.conf" /etc/httpd/httpd.conf > \
-		etc/httpd/httpd.conf.tmp
-	mv -f /etc/httpd/httpd.conf.tmp /etc/httpd/httpd.conf
+	if [ -d /etc/httpd/httpd.conf ]; then
+		rm -f /etc/httpd/httpd.conf/99_%{name}.conf
+	else
+		grep -v "^Include.*/etc/%{name}/apache.conf" /etc/httpd/httpd.conf > \
+			/etc/httpd/httpd.conf.tmp
+		mv -f /etc/httpd/httpd.conf.tmp /etc/httpd/httpd.conf
+	fi
+
 	if [ -f /var/lock/subsys/httpd ]; then
 		/usr/sbin/apachectl restart 1>&2
 	fi
