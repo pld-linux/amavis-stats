@@ -9,6 +9,7 @@ License:	GPL
 Group:		Applications/System
 Source0:	http://rekudos.net/download/%{name}-%{version}-%{_rc}.tar.gz
 # Source0-md5:	39156ca0eba50405d836aaf9d97743bf
+# Source0-size:	59492
 Source1:	%{name}.cron
 Patch0:		%{name}-gzip.patch
 Patch1:		%{name}-more_ac.patch
@@ -64,7 +65,7 @@ group=`id -g`
 	amavis_group=$group \
 	web_user=$user \
 	web_group=$group
-	
+
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/cron.d/amavis-stats
 
 cd $RPM_BUILD_ROOT%{_datadir}/%{name}/
@@ -110,8 +111,8 @@ fi
 
 %files php
 %defattr(644,root,root,755)
-%dir /etc/%{name}
-%attr(640,root,root) %config(noreplace) /etc/%{name}/apache.conf
+%dir %{_sysconfdir}/%{name}
+%attr(640,root,root) %config(noreplace) %{_sysconfdir}/%{name}/apache.conf
 %dir %{_phpdir}
 %dir %attr(755,http,root) %{_phpdir}/img
 %{_phpdir}/%{name}.php
