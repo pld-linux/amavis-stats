@@ -3,7 +3,7 @@ Summary:	Simple amavisd-new statistics generator
 Summary(pl):	Prosty generator statystyk dla amavisd-new
 Name:		amavis-stats
 Version:	0.1.12
-Release:	1
+Release:	2
 License:	GPL
 Group:		Applications/System
 Source0:	http://rekudos.net/download/%{name}-%{version}.tar.gz
