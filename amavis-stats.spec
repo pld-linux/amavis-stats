@@ -9,7 +9,6 @@ License:	GPL
 Group:		Applications/System
 Source0:	http://rekudos.net/download/%{name}-%{version}-%{_rc}.tar.gz
 # Source0-md5:	39156ca0eba50405d836aaf9d97743bf
-# Source0-size:	59492
 Source1:	%{name}.cron
 Patch0:		%{name}-gzip.patch
 Patch1:		%{name}-more_ac.patch
