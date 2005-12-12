@@ -107,7 +107,7 @@ fi
 %doc README debian/changelog
 %attr(755,root,root) %{_sbindir}/amavis-stats
 %dir %{_pkglibdir}
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/cron.d/amavis-stats
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/cron.d/amavis-stats
 %{_mandir}/man1/*
 
 %files php
