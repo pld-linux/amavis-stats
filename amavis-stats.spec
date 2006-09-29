@@ -86,10 +86,10 @@ cp $RPM_BUILD_ROOT%{_webapps}/%{_webapp}/{httpd,apache}.conf
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%triggerin php -- apache1
+%triggerin php -- apache1 < 1.3.37-3, apache1-base
 %webapp_register apache %{_webapp}
 
-%triggerun php -- apache1
+%triggerun php -- apache1 < 1.3.37-3, apache1-base
 %webapp_unregister apache %{_webapp}
 
 %triggerin php -- apache < 2.2.0, apache-base
