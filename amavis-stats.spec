@@ -1,3 +1,7 @@
+#########################
+## WARNING:
+## - That project is obsolete. Works, but should be obsoleted by parselog.
+#########################
 %include	/usr/lib/rpm/macros.perl
 %define		_rc	rc6
 Summary:	Simple amavisd-new statistics generator
