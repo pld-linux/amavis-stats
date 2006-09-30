@@ -4,11 +4,12 @@
 #########################
 %include	/usr/lib/rpm/macros.perl
 %define		_rc	rc6
+%define		_rel	6
 Summary:	Simple amavisd-new statistics generator
 Summary(pl):	Prosty generator statystyk dla amavisd-new
 Name:		amavis-stats
 Version:	0.1.13
-Release:	0.%{_rc}.5
+Release:	0.%{_rc}.%{_rel}
 License:	GPL
 Group:		Applications/System
 Source0:	http://rekudos.net/download/%{name}-%{version}-%{_rc}.tar.gz
