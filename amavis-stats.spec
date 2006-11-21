@@ -2,7 +2,7 @@
 # - move to http://www.daleenterprise.com/amavis-stats/
 %include	/usr/lib/rpm/macros.perl
 %define		_rc	rc6
-%define		_rel	6
+%define		_rel	7
 Summary:	Simple amavisd-new statistics generator
 Summary(pl):	Prosty generator statystyk dla amavisd-new
 Name:		amavis-stats
@@ -45,9 +45,9 @@ Summary:	PHP interface for amavis-stats
 Summary(pl):	Interfejs PHP dla amavis-stats
 Group:		Applications/System
 Requires:	%{name}-%{version}-%{release}
-Requires:	php
-Requires:	php-pcre
+Requires:	php(pcre)
 Requires:	webapps
+Requires:	webserver(php)
 
 %description php
 PHP interface for amavis-stats.
