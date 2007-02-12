@@ -4,7 +4,7 @@
 %define		_rc	rc6
 %define		_rel	7
 Summary:	Simple amavisd-new statistics generator
-Summary(pl):	Prosty generator statystyk dla amavisd-new
+Summary(pl.UTF-8):   Prosty generator statystyk dla amavisd-new
 Name:		amavis-stats
 Version:	0.1.13
 Release:	0.%{_rc}.%{_rel}
@@ -35,14 +35,14 @@ amavis-stats is a simple amavis statistics generator based on rrdtool.
 It produces graphs from amavisd-new log entries of infections broken
 down by virus.
 
-%description -l pl
+%description -l pl.UTF-8
 amavis-stats jest prostym generatorem statystyk opartym na rrdtool.
-Tworzy wykresy zainfekowanych wiadomo∂ci, w rozbiciu na poszczegÛlne
-wirusy, na podstawie logÛw amavisd-new.
+Tworzy wykresy zainfekowanych wiadomo≈õci, w rozbiciu na poszczeg√≥lne
+wirusy, na podstawie log√≥w amavisd-new.
 
 %package php
 Summary:	PHP interface for amavis-stats
-Summary(pl):	Interfejs PHP dla amavis-stats
+Summary(pl.UTF-8):   Interfejs PHP dla amavis-stats
 Group:		Applications/System
 Requires:	%{name}-%{version}-%{release}
 Requires:	php(pcre)
@@ -52,7 +52,7 @@ Requires:	webserver(php)
 %description php
 PHP interface for amavis-stats.
 
-%description php -l pl
+%description php -l pl.UTF-8
 Interfejs PHP dla amavis-stats.
 
 %prep
