@@ -4,7 +4,7 @@
 %define		_rc	rc6
 %define		_rel	7
 Summary:	Simple amavisd-new statistics generator
-Summary(pl.UTF-8):   Prosty generator statystyk dla amavisd-new
+Summary(pl.UTF-8):	Prosty generator statystyk dla amavisd-new
 Name:		amavis-stats
 Version:	0.1.13
 Release:	0.%{_rc}.%{_rel}
@@ -42,7 +42,7 @@ wirusy, na podstawie logów amavisd-new.
 
 %package php
 Summary:	PHP interface for amavis-stats
-Summary(pl.UTF-8):   Interfejs PHP dla amavis-stats
+Summary(pl.UTF-8):	Interfejs PHP dla amavis-stats
 Group:		Applications/System
 Requires:	%{name}-%{version}-%{release}
 Requires:	php(pcre)
