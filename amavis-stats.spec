@@ -1,5 +1,5 @@
 # TODO:
-# - move to http://www.daleenterprise.com/amavis-stats/
+# - update source0
 %include	/usr/lib/rpm/macros.perl
 %define		_rc	rc6
 %define		_rel	7
@@ -16,9 +16,7 @@ Source1:	%{name}.cron
 Patch0:		%{name}-gzip.patch
 Patch1:		%{name}-more_ac.patch
 Patch2:		%{name}-Makefile.patch
-# Old URL:
-#URL:		http://rekudos.net/amavis-stats/
-URL:		http://www.daleenterprise.com/amavis-stats/
+URL:		http://osx.topicdesk.com/content/view/42/59/
 BuildRequires:	rpmbuild(macros) >= 1.268
 Provides:	%{name}-%{version}-%{release}
 BuildArch:	noarch
