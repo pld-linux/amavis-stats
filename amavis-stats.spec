@@ -1,28 +1,24 @@
-# TODO:
-# - update source0
 %include	/usr/lib/rpm/macros.perl
-%define		_rc	rc6
-%define		_rel	7
 Summary:	Simple amavisd-new statistics generator
 Summary(pl.UTF-8):	Prosty generator statystyk dla amavisd-new
 Name:		amavis-stats
-Version:	0.1.13
-Release:	0.%{_rc}.%{_rel}
+Version:	0.1.22
+Release:	0.1
 License:	GPL
 Group:		Applications/System
-Source0:	http://rekudos.net/download/%{name}-%{version}-%{_rc}.tar.gz
-# Source0-md5:	39156ca0eba50405d836aaf9d97743bf
+Source0:	http://downloads.topicdesk.com/amavis_stats/%{name}-%{version}.tar.gz
+# Source0-md5:	5bea6811c00a4fda4b96b6a318a04a92
 Source1:	%{name}.cron
 Patch0:		%{name}-gzip.patch
-Patch1:		%{name}-more_ac.patch
-Patch2:		%{name}-Makefile.patch
+Patch1:		%{name}-Makefile.patch
 URL:		http://osx.topicdesk.com/content/view/42/59/
 BuildRequires:	rpmbuild(macros) >= 1.268
 Provides:	%{name}-%{version}-%{release}
-BuildArch:	noarch
+#BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_pkglibdir	/var/lib/%{name}
+%define		_pkgcachedir	/var/cache/%{name}
 %define		_webapps	/etc/webapps
 %define		_webapp		%{name}
 %define		_webappdir	%{_webapps}/%{_webapp}
@@ -54,32 +50,34 @@ PHP interface for amavis-stats.
 Interfejs PHP dla amavis-stats.
 
 %prep
-%setup -q -n %{name}-%{version}-%{_rc}
+%setup -q
 %patch0 -p1
-%patch1 -p0
-%patch2 -p1
+%patch1 -p1
 
 %build
-%configure
+%{__libtoolize}
+%{__aclocal}
+%{__autoconf}
+%{__autoheader}
+%{__automake}
+%configure \
+	--with-user=http \
+	--with-group=http \
+	--with-log-file=/var/log/maillog
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/cron.d
-user=`id -u`
-group=`id -g`
 
 %{__make} install \
-	install_prefix=$RPM_BUILD_ROOT \
-	amavis_user=$user \
-	amavis_group=$group \
-	web_user=$user \
-	web_group=$group
+	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/cron.d/amavis-stats
-ln -s amavis-stats.php $RPM_BUILD_ROOT%{_datadir}/%{name}/index.php
 install -d $RPM_BUILD_ROOT%{_webapps}/%{_webapp}
-mv $RPM_BUILD_ROOT{/etc/amavis-stats/apache.conf,%{_webapps}/%{_webapp}/httpd.conf}
+mv $RPM_BUILD_ROOT{%{_datadir}/amavis-stats/amavis-stats.alias.conf,%{_webapps}/%{_webapp}/httpd.conf}
+mv $RPM_BUILD_ROOT{%{_datadir}/amavis-stats/amavis-stats.php.conf,%{_webapps}/%{_webapp}}
+ln -s %{_webapps}/%{_webapp}/amavis-stats.php.conf $RPM_BUILD_ROOT%{_datadir}/%{name}/amavis-stats.php.conf
 cp $RPM_BUILD_ROOT%{_webapps}/%{_webapp}/{httpd,apache}.conf
 
 %clean
@@ -113,10 +111,11 @@ rm -f /etc/httpd/httpd.conf/99_%{name}.conf
 
 %files
 %defattr(644,root,root,755)
-%doc README debian/changelog
+%doc README ChangeLog
 %attr(755,root,root) %{_sbindir}/amavis-stats
 %dir %{_pkglibdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/cron.d/amavis-stats
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/amavis-stats.conf
 %{_mandir}/man1/*
 
 %files php
@@ -124,9 +123,15 @@ rm -f /etc/httpd/httpd.conf/99_%{name}.conf
 %dir %attr(750,root,http) %{_webapps}/%{_webapp}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_webapps}/%{_webapp}/apache.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_webapps}/%{_webapp}/httpd.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_webapps}/%{_webapp}/amavis-stats.php.conf
 %dir %{_appdir}
-# symlink
+%{_appdir}/amavis-stats.php.conf
 %{_appdir}/img
-%{_appdir}/%{name}.php
+%{_appdir}/includes
 %{_appdir}/index.php
-%attr(775,root,http) %dir %{_pkglibdir}/img
+%{_appdir}/templates
+%{_appdir}/%{name}.php
+%{_appdir}/%{name}.html
+%{_appdir}/*.png
+%{_appdir}/*.ttf
+%attr(775,root,http) %dir %{_pkgcachedir}
