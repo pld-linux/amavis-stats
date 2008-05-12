@@ -1,11 +1,31 @@
---- amavis-stats-0.1.13-rc6/Makefile.in	2004-05-07 09:31:55.000000000 +0000
-+++ amavis-stats-0.1.13-rc6.new/Makefile.in	2004-11-01 13:37:09.662852080 +0000
-@@ -169,7 +169,7 @@
- 	sed -e 's/^\(\$$asVersion \+= \+\"\).*\"/\1$(VERS)\"/' \
- 		amavis-stats.php > VERS.php
- 	mv VERS.php amavis-stats.php
--	sed -e "1s+.*+\#! $(perl)+" \
-+	sed -e "1s+.*+\#!$(perl)+" \
- 		amavis-stats > VERS.pl
- 	mv VERS.pl amavis-stats
- 	sed -e 's/^\(\$$version \+= \+\"\).*\"/\1$(VERS)\"/' \
+diff -urN amavis-stats-0.1.22.orig/share/Makefile.am amavis-stats-0.1.22/share/Makefile.am
+--- amavis-stats-0.1.22.orig/share/Makefile.am	2005-10-27 04:36:37.000000000 +0200
++++ amavis-stats-0.1.22/share/Makefile.am	2008-05-12 14:03:05.000000000 +0200
+@@ -66,12 +66,12 @@
+ 	@echo "Processing web files...."
+ 
+ installdirs:
+-	$(INSTALL) -o $(WEB_USER) -g $(WEB_GROUP) -d -m 0775 $(DESTDIR)$(mylibdir)/$(PACKAGE)
+-	$(INSTALL) -o $(WEB_USER) -g $(WEB_GROUP) -d -m 0775 $(DESTDIR)$(mycachedir)/$(PACKAGE)
+-	$(INSTALL) -o $(WEB_USER) -g $(WEB_GROUP) -d -m 0775 $(DESTDIR)$(pkgdatadir)
+-	$(INSTALL) -o $(WEB_USER) -g $(WEB_GROUP) -d -m 0775 $(DESTDIR)$(pkgdatadir)/includes
+-	$(INSTALL) -o $(WEB_USER) -g $(WEB_GROUP) -d -m 0775 $(DESTDIR)$(pkgdatadir)/templates/standard
+-	$(INSTALL) -o $(WEB_USER) -g $(WEB_GROUP) -d -m 0775 $(DESTDIR)$(pkgdatadir)/templates/business1/images
++	$(INSTALL) -d -m 0775 $(DESTDIR)$(mylibdir)/$(PACKAGE)
++	$(INSTALL) -d -m 0775 $(DESTDIR)$(mycachedir)/$(PACKAGE)
++	$(INSTALL) -d -m 0775 $(DESTDIR)$(pkgdatadir)
++	$(INSTALL) -d -m 0775 $(DESTDIR)$(pkgdatadir)/includes
++	$(INSTALL) -d -m 0775 $(DESTDIR)$(pkgdatadir)/templates/standard
++	$(INSTALL) -d -m 0775 $(DESTDIR)$(pkgdatadir)/templates/business1/images
+ 
+ 
+ install-data-am: install-pkgdataDATA
+@@ -88,7 +88,7 @@
+ 	@list='$(pkgdata_DATA)'; for p in $$list; do \
+ 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+ 	  echo "  Installing $(DESTDIR)$(pkgdatadir)/$$p"; \
+-	  $(pkgdataDATA_INSTALL) -o $(WEB_USER) -g $(WEB_GROUP) $$d$$p $(DESTDIR)$(pkgdatadir)/$$p; \
++	  $(pkgdataDATA_INSTALL) $$d$$p $(DESTDIR)$(pkgdatadir)/$$p; \
+ 	done
+ 
+ uninstall-pkgdataDATA:
