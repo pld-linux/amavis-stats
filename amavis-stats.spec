@@ -13,6 +13,7 @@ Patch0:		%{name}-gzip.patch
 Patch1:		%{name}-Makefile.patch
 URL:		http://osx.topicdesk.com/content/view/42/59/
 BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	sed
 Provides:	%{name}-%{version}-%{release}
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -60,6 +61,7 @@ Interfejs PHP dla amavis-stats.
 %{__autoconf}
 %{__autoheader}
 %{__automake}
+sed -i -e '/basic_machine=powerpc-apple/s/$/\n\t\t;;\n\tnoarch-*)\n\t\tbasic_machine=noarch/;' config.sub
 %configure \
 	--with-user=http \
 	--with-group=http \
