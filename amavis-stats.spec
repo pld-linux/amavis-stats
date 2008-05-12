@@ -1,3 +1,8 @@
+#
+# TODO:
+#   - add init script
+#   - add trigger to update apache configuration
+#
 %include	/usr/lib/rpm/macros.perl
 Summary:	Simple amavisd-new statistics generator
 Summary(pl.UTF-8):	Prosty generator statystyk dla amavisd-new
@@ -8,9 +13,9 @@ License:	GPL
 Group:		Applications/System
 Source0:	http://downloads.topicdesk.com/amavis_stats/%{name}-%{version}.tar.gz
 # Source0-md5:	5bea6811c00a4fda4b96b6a318a04a92
-Source1:	%{name}.cron
 Patch0:		%{name}-gzip.patch
 Patch1:		%{name}-Makefile.patch
+Patch2:		%{name}-pid.patch
 URL:		http://osx.topicdesk.com/content/view/42/59/
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
@@ -54,6 +59,7 @@ Interfejs PHP dla amavis-stats.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 %{__libtoolize}
@@ -70,12 +76,10 @@ sed -i -e '/basic_machine=powerpc-apple/s/$/\n\t\t;;\n\tnoarch-*)\n\t\tbasic_mac
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/cron.d
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/cron.d/amavis-stats
 install -d $RPM_BUILD_ROOT%{_webapps}/%{_webapp}
 mv $RPM_BUILD_ROOT{%{_datadir}/amavis-stats/amavis-stats.alias.conf,%{_webapps}/%{_webapp}/httpd.conf}
 mv $RPM_BUILD_ROOT{%{_datadir}/amavis-stats/amavis-stats.php.conf,%{_webapps}/%{_webapp}}
@@ -116,7 +120,6 @@ rm -f /etc/httpd/httpd.conf/99_%{name}.conf
 %doc README ChangeLog
 %attr(755,root,root) %{_sbindir}/amavis-stats
 %dir %{_pkglibdir}
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/cron.d/amavis-stats
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/amavis-stats.conf
 %{_mandir}/man1/*
 
