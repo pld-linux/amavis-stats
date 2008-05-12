@@ -1,18 +1,19 @@
 #
 # TODO:
-#   - add init script
-#   - add trigger to update apache configuration
+#   - add trigger to update apache configuration when upgrading from
+#     older versions (not sure if this is required)
 #
 %include	/usr/lib/rpm/macros.perl
 Summary:	Simple amavisd-new statistics generator
 Summary(pl.UTF-8):	Prosty generator statystyk dla amavisd-new
 Name:		amavis-stats
 Version:	0.1.22
-Release:	0.1
+Release:	0.2
 License:	GPL
 Group:		Applications/System
 Source0:	http://downloads.topicdesk.com/amavis_stats/%{name}-%{version}.tar.gz
 # Source0-md5:	5bea6811c00a4fda4b96b6a318a04a92
+Source1:	%{name}.init
 Patch0:		%{name}-gzip.patch
 Patch1:		%{name}-Makefile.patch
 Patch2:		%{name}-pid.patch
@@ -80,11 +81,12 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT%{_webapps}/%{_webapp}
+install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d,%{_webapps}/%{_webapp}}
 mv $RPM_BUILD_ROOT{%{_datadir}/amavis-stats/amavis-stats.alias.conf,%{_webapps}/%{_webapp}/httpd.conf}
 mv $RPM_BUILD_ROOT{%{_datadir}/amavis-stats/amavis-stats.php.conf,%{_webapps}/%{_webapp}}
 ln -s %{_webapps}/%{_webapp}/amavis-stats.php.conf $RPM_BUILD_ROOT%{_datadir}/%{name}/amavis-stats.php.conf
 cp $RPM_BUILD_ROOT%{_webapps}/%{_webapp}/{httpd,apache}.conf
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/amavis-stats
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -118,6 +120,7 @@ rm -f /etc/httpd/httpd.conf/99_%{name}.conf
 %files
 %defattr(644,root,root,755)
 %doc README ChangeLog
+%attr(754,root,root) /etc/rc.d/init.d/amavis-stats
 %attr(755,root,root) %{_sbindir}/amavis-stats
 %dir %{_pkglibdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/amavis-stats.conf
