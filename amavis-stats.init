@@ -17,7 +17,7 @@
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
 	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
-		msg_network_down amavis-stats
+		msg_network_down "Amavis Stats"
 		exit 1
 	fi
 else
@@ -27,23 +27,23 @@ fi
 start() {
 	# Start daemons.
 	if [ ! -f /var/lock/subsys/amavis-stats ]; then
-		msg_starting Amavis-Stats
+		msg_starting "Amavis Stats"
 		daemon amavis-stats
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/amavis-stats
 	else
-		msg_already_running Amavis-Stats
+		msg_already_running "Amavis Stats"
 	fi
 }
 
 stop() {
 	# Stop daemons.
 	if [ -f /var/lock/subsys/amavis-stats ]; then
-		msg_stopping Amavis-Stats
+		msg_stopping "Amavis Stats"
 		killproc amavis-stats
 		rm -f /var/lock/subsys/amavis-stats >/dev/null 2>&1
 	else
-		msg_not_running amavis-stats
+		msg_not_running "Amavis Stats"
 	fi
 }
 
@@ -61,7 +61,7 @@ case "$1" in
 	start
 	;;
   status)
-	status Amavis-Stats Amavis-Stats
+	status amavis-stats
 	exit $?
 	;;
   *)
