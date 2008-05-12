@@ -1,0 +1,24 @@
+diff -urN amavis-stats-0.1.22.orig/etc/amavis-stats.conf.in amavis-stats-0.1.22/etc/amavis-stats.conf.in
+--- amavis-stats-0.1.22.orig/etc/amavis-stats.conf.in	2005-10-13 16:36:47.000000000 +0200
++++ amavis-stats-0.1.22/etc/amavis-stats.conf.in	2008-05-12 18:52:29.000000000 +0200
+@@ -32,7 +32,7 @@
+ # Run the daemon in the specified chroot jail if nonempty:
+ #$daemon_chroot_dir = $MYHOME;  # (default is undef, meaning: do not chroot)
+ 
+-$pid_file			= "$MYHOME/@PKGNAME@.pid";	# (default is "$MYHOME/@PKGNAME@.pid")
++$pid_file			= "/var/run/@PKGNAME@.pid";	# (default is "/var/run/@PKGNAME@.pid")
+ 
+ # What log file to scan for amavisd-new data:
+ $scan_logfile		= "@SCAN_LOG_FILE@";		# (default is "@SCAN_LOG_FILE@")
+diff -urN amavis-stats-0.1.22.orig/sbin/amavis-stats.in amavis-stats-0.1.22/sbin/amavis-stats.in
+--- amavis-stats-0.1.22.orig/sbin/amavis-stats.in	2008-05-12 18:36:55.000000000 +0200
++++ amavis-stats-0.1.22/sbin/amavis-stats.in	2008-05-12 18:52:37.000000000 +0200
+@@ -232,7 +232,7 @@
+ 	}
+ 	$daemon_chroot_dir = ''	if !defined $daemon_chroot_dir;	# avoids warnings
+ 	# provide some sensible defaults for essential settings (post-defaults)
+-	$pid_file		= "$MYHOME/@PKGNAME@.pid" if !defined $pid_file;
++	$pid_file		= "/var/run/@PKGNAME@.pid" if !defined $pid_file;
+ 	$scan_logfile	= '@SCAN_LOG_FILE@' if !defined $scan_logfile;
+ 	$daemon_user	= '@WEB_USER@' if !defined $daemon_user;
+ 	$daemon_group	= '@WEB_GROUP@' if !defined $daemon_group;
