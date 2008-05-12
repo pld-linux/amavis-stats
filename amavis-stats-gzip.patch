@@ -1,6 +1,6 @@
 diff -urN amavis-stats-0.1.22.orig/configure.in amavis-stats-0.1.22/configure.in
 --- amavis-stats-0.1.22.orig/configure.in	2006-12-04 13:59:29.000000000 +0100
-+++ amavis-stats-0.1.22/configure.in	2008-05-12 14:38:27.000000000 +0200
++++ amavis-stats-0.1.22/configure.in	2008-05-12 18:28:44.000000000 +0200
 @@ -66,7 +66,6 @@
  AC_PATH_PROG(CP, cp, cp)
  AC_PATH_PROG(CHMOD, chmod, chmod)
@@ -26,7 +26,7 @@ diff -urN amavis-stats-0.1.22.orig/configure.in amavis-stats-0.1.22/configure.in
  
 diff -urN amavis-stats-0.1.22.orig/doc/Makefile.in amavis-stats-0.1.22/doc/Makefile.in
 --- amavis-stats-0.1.22.orig/doc/Makefile.in	2006-12-04 14:00:42.000000000 +0100
-+++ amavis-stats-0.1.22/doc/Makefile.in	2008-05-12 14:38:27.000000000 +0200
++++ amavis-stats-0.1.22/doc/Makefile.in	2008-05-12 18:28:44.000000000 +0200
 @@ -108,7 +108,6 @@
  GCJ = @GCJ@
  GCJFLAGS = @GCJFLAGS@
@@ -37,7 +37,7 @@ diff -urN amavis-stats-0.1.22.orig/doc/Makefile.in amavis-stats-0.1.22/doc/Makef
  LINK_CMD = @LINK_CMD@
 diff -urN amavis-stats-0.1.22.orig/etc/Makefile.in amavis-stats-0.1.22/etc/Makefile.in
 --- amavis-stats-0.1.22.orig/etc/Makefile.in	2006-12-04 14:00:44.000000000 +0100
-+++ amavis-stats-0.1.22/etc/Makefile.in	2008-05-12 14:38:27.000000000 +0200
++++ amavis-stats-0.1.22/etc/Makefile.in	2008-05-12 18:28:44.000000000 +0200
 @@ -108,7 +108,6 @@
  GCJ = @GCJ@
  GCJFLAGS = @GCJFLAGS@
@@ -48,7 +48,7 @@ diff -urN amavis-stats-0.1.22.orig/etc/Makefile.in amavis-stats-0.1.22/etc/Makef
  LINK_CMD = @LINK_CMD@
 diff -urN amavis-stats-0.1.22.orig/Makefile.in amavis-stats-0.1.22/Makefile.in
 --- amavis-stats-0.1.22.orig/Makefile.in	2006-12-04 13:59:40.000000000 +0100
-+++ amavis-stats-0.1.22/Makefile.in	2008-05-12 14:38:27.000000000 +0200
++++ amavis-stats-0.1.22/Makefile.in	2008-05-12 18:28:44.000000000 +0200
 @@ -108,7 +108,6 @@
  GCJ = @GCJ@
  GCJFLAGS = @GCJFLAGS@
@@ -59,7 +59,7 @@ diff -urN amavis-stats-0.1.22.orig/Makefile.in amavis-stats-0.1.22/Makefile.in
  LINK_CMD = @LINK_CMD@
 diff -urN amavis-stats-0.1.22.orig/php/Makefile.in amavis-stats-0.1.22/php/Makefile.in
 --- amavis-stats-0.1.22.orig/php/Makefile.in	2006-12-04 14:00:39.000000000 +0100
-+++ amavis-stats-0.1.22/php/Makefile.in	2008-05-12 14:38:27.000000000 +0200
++++ amavis-stats-0.1.22/php/Makefile.in	2008-05-12 18:28:44.000000000 +0200
 @@ -124,7 +124,6 @@
  GCJ = @GCJ@
  GCJFLAGS = @GCJFLAGS@
@@ -70,7 +70,7 @@ diff -urN amavis-stats-0.1.22.orig/php/Makefile.in amavis-stats-0.1.22/php/Makef
  LINK_CMD = @LINK_CMD@
 diff -urN amavis-stats-0.1.22.orig/sbin/amavis-stats.in amavis-stats-0.1.22/sbin/amavis-stats.in
 --- amavis-stats-0.1.22.orig/sbin/amavis-stats.in	2006-01-21 02:25:01.000000000 +0100
-+++ amavis-stats-0.1.22/sbin/amavis-stats.in	2008-05-12 14:38:57.000000000 +0200
++++ amavis-stats-0.1.22/sbin/amavis-stats.in	2008-05-12 18:36:55.000000000 +0200
 @@ -59,6 +59,7 @@
  		Exporter POSIX Fcntl Errno Carp Time::HiRes
  		Unix::Syslog RRDp RRDs IO::File
@@ -87,7 +87,7 @@ diff -urN amavis-stats-0.1.22.orig/sbin/amavis-stats.in amavis-stats-0.1.22/sbin
  
  BEGIN {
  	import AmavisStats::Conf qw(:platform $myversion $myhostname $daemon_user);
-@@ -1596,6 +1598,55 @@
+@@ -1596,6 +1598,56 @@
  
  	}
  
@@ -99,7 +99,8 @@ diff -urN amavis-stats-0.1.22.orig/sbin/amavis-stats.in amavis-stats-0.1.22/sbin
 +		#
 +		# Open up the file we need to parse
 +		#
-+		unless (my $gz = gzopen ($fname, "rb") {
++		my $gz;
++		unless ($gz = gzopen ($fname, "rb")) {
 +			do_log(1, "ERROR : Could not open file $fname: $!"); 
 +		}
 +
@@ -143,7 +144,7 @@ diff -urN amavis-stats-0.1.22.orig/sbin/amavis-stats.in amavis-stats-0.1.22/sbin
  	sub parseRotFile { 
  		do_log(5, "DEBUG : parseRotFile()");
  		my ($scan_logfile, $spos) = @_;
-@@ -1614,25 +1665,65 @@
+@@ -1614,25 +1666,65 @@
  
  		my $rotlogfile = undef;
  
@@ -173,11 +174,11 @@ diff -urN amavis-stats-0.1.22.orig/sbin/amavis-stats.in amavis-stats-0.1.22/sbin
 +		} elsif (-f "$scan_logfile-$yesterday.gz") {
 +			$rotlogfile = $scan_logfile . "-$yesterday.gz";
 +		} else {
-+			$rotlogfile = $logfile;
++			$rotlogfile = $scan_logfile;
 +			# $rotlogfile =~ s/(.*)\/([a-z]*)/$1\/archiv\/$2/g;
 +			$rotlogfile =~ s/\/var\/log\/(.*)/\/var\/log\/archive\/$1/g;
-+			if ($rotlogfile eq $logfile) {
-+				$rotlogfile = "archiv/$logfile";
++			if ($rotlogfile eq $scan_logfile) {
++				$rotlogfile = "archiv/$scan_logfile";
 +			}
 +			if (-f "$rotlogfile.0") {
 +				$rotlogfile = $rotlogfile . ".0";
@@ -215,7 +216,7 @@ diff -urN amavis-stats-0.1.22.orig/sbin/amavis-stats.in amavis-stats-0.1.22/sbin
  		} else {
  			do_log(1, "ERROR : Could not open rotated logfile.");
  			do_log(1, "ERROR :	Tried extentions .0.gz, .0, .1, .01, -$today, -$yesterday");
-@@ -1803,7 +1894,11 @@
+@@ -1803,7 +1895,11 @@
  			}
  
  			do_log(5, "DEBUG : $scan_logfile, $spos, $eof");
@@ -230,7 +231,7 @@ diff -urN amavis-stats-0.1.22.orig/sbin/amavis-stats.in amavis-stats-0.1.22/sbin
  			do_log(1, sprintf("Finished -> %s", $scan_domains eq '.*' ? 'localhost' : $scan_domains));
 diff -urN amavis-stats-0.1.22.orig/sbin/Makefile.in amavis-stats-0.1.22/sbin/Makefile.in
 --- amavis-stats-0.1.22.orig/sbin/Makefile.in	2006-12-04 14:00:49.000000000 +0100
-+++ amavis-stats-0.1.22/sbin/Makefile.in	2008-05-12 14:38:27.000000000 +0200
++++ amavis-stats-0.1.22/sbin/Makefile.in	2008-05-12 18:28:44.000000000 +0200
 @@ -108,7 +108,6 @@
  GCJ = @GCJ@
  GCJFLAGS = @GCJFLAGS@
@@ -241,7 +242,7 @@ diff -urN amavis-stats-0.1.22.orig/sbin/Makefile.in amavis-stats-0.1.22/sbin/Mak
  LINK_CMD = @LINK_CMD@
 diff -urN amavis-stats-0.1.22.orig/share/Makefile.in amavis-stats-0.1.22/share/Makefile.in
 --- amavis-stats-0.1.22.orig/share/Makefile.in	2006-12-04 14:00:47.000000000 +0100
-+++ amavis-stats-0.1.22/share/Makefile.in	2008-05-12 14:38:27.000000000 +0200
++++ amavis-stats-0.1.22/share/Makefile.in	2008-05-12 18:28:44.000000000 +0200
 @@ -108,7 +108,6 @@
  GCJ = @GCJ@
  GCJFLAGS = @GCJFLAGS@
@@ -252,7 +253,7 @@ diff -urN amavis-stats-0.1.22.orig/share/Makefile.in amavis-stats-0.1.22/share/M
  LINK_CMD = @LINK_CMD@
 diff -urN amavis-stats-0.1.22.orig/startup/Makefile.in amavis-stats-0.1.22/startup/Makefile.in
 --- amavis-stats-0.1.22.orig/startup/Makefile.in	2006-12-04 14:02:26.000000000 +0100
-+++ amavis-stats-0.1.22/startup/Makefile.in	2008-05-12 14:38:27.000000000 +0200
++++ amavis-stats-0.1.22/startup/Makefile.in	2008-05-12 18:28:44.000000000 +0200
 @@ -108,7 +108,6 @@
  GCJ = @GCJ@
  GCJFLAGS = @GCJFLAGS@
