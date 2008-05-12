@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# atftpd	This shell script takes care of starting and stopping atftpd
+# amavis-stats	This shell script takes care of starting and stopping amavis stats collector
 #
 # chkconfig:	345 86 14
 # description:	amavis statistics collector
