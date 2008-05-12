@@ -8,7 +8,7 @@ Summary:	Simple amavisd-new statistics generator
 Summary(pl.UTF-8):	Prosty generator statystyk dla amavisd-new
 Name:		amavis-stats
 Version:	0.1.22
-Release:	0.2
+Release:	0.3
 License:	GPL
 Group:		Applications/System
 Source0:	http://downloads.topicdesk.com/amavis_stats/%{name}-%{version}.tar.gz
@@ -70,7 +70,7 @@ Interfejs PHP dla amavis-stats.
 %{__automake}
 sed -i -e '/basic_machine=powerpc-apple/s/$/\n\t\t;;\n\tnoarch-*)\n\t\tbasic_machine=noarch/;' config.sub
 %configure \
-	--with-user=http \
+	--with-user=root \
 	--with-group=http \
 	--with-log-file=/var/log/maillog
 %{__make}
@@ -131,7 +131,7 @@ rm -f /etc/httpd/httpd.conf/99_%{name}.conf
 %dir %attr(750,root,http) %{_webapps}/%{_webapp}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_webapps}/%{_webapp}/apache.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_webapps}/%{_webapp}/httpd.conf
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_webapps}/%{_webapp}/amavis-stats.php.conf
+%attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_webapps}/%{_webapp}/amavis-stats.php.conf
 %dir %{_appdir}
 %{_appdir}/amavis-stats.php.conf
 %{_appdir}/img
