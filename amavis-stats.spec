@@ -14,7 +14,7 @@ Patch1:		%{name}-Makefile.patch
 URL:		http://osx.topicdesk.com/content/view/42/59/
 BuildRequires:	rpmbuild(macros) >= 1.268
 Provides:	%{name}-%{version}-%{release}
-#BuildArch:	noarch
+BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_pkglibdir	/var/lib/%{name}
