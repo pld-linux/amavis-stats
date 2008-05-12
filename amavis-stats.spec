@@ -13,7 +13,7 @@ Patch0:		%{name}-gzip.patch
 Patch1:		%{name}-Makefile.patch
 URL:		http://osx.topicdesk.com/content/view/42/59/
 BuildRequires:	rpmbuild(macros) >= 1.268
-BuildRequires:	sed
+BuildRequires:	sed >= 4.0
 Provides:	%{name}-%{version}-%{release}
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
