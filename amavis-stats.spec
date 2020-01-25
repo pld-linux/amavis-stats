@@ -3,7 +3,6 @@
 #   - add trigger to update apache configuration when upgrading from
 #     older versions (not sure if this is required)
 #
-%include	/usr/lib/rpm/macros.perl
 Summary:	Simple amavisd-new statistics generator
 Summary(pl.UTF-8):	Prosty generator statystyk dla amavisd-new
 Name:		amavis-stats
